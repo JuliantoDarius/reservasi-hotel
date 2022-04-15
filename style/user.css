@@ -1,0 +1,10 @@
+* {
+   margin: 0;
+   padding: 0;
+}
+
+.flash {
+   text-align: center;
+   margin: 0;
+   cursor: pointer;
+}

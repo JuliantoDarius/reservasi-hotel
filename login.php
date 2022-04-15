@@ -16,7 +16,7 @@
 
 <body>
     <div class="background">
-        <img src="./img/background.jpg" alt="">
+        <img src="./img/login.jpg" alt="">
     </div>
 
     <div class="flex-container">
@@ -30,7 +30,7 @@
                     <div class="mb-4 mt-4 row">
                         <label for="username" class="col-sm-2 col-form-label"><i class="fa-solid fa-user"></i></label>
                         <div class="col-sm-10">
-                            <input type="text" name="username" class="form-control" id="username" placeholder="Username" required>
+                            <input type="text" name="username" class="form-control" id="username" placeholder="Username" required autocomplete="off">
                         </div>
                     </div>
                     <div class="mb-4 row">
@@ -50,7 +50,7 @@
                     <div class="row">
                         <div class="col-sm-10">
                             <p class="sign-up">
-                                Tidak Punya Akun ? <a href="#">Daftar</a>
+                                Tidak Punya Akun ? <a href="./user/akun/daftar.php">Daftar</a>
                             </p>
                         </div>
                     </div>

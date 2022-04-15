@@ -1,55 +1,60 @@
+* {
+   margin: 0;
+   padding: 0;
+}
+
 .background img {
-    filter: brightness(40%);
-    height: 100vh;
-    width: 100vw;
-    position: absolute;
-    z-index: -1;
+   filter: brightness(40%);
+   height: 100vh;
+   width: 100vw;
+   position: absolute;
+   z-index: -1;
 }
 .flex-container {
-    display: flex;
-    height: 100vh;
-    width: 100vw;
-    align-items: center;
-    justify-content: center;
+   display: flex;
+   height: 100vh;
+   width: 100vw;
+   align-items: center;
+   justify-content: center;
 }
 
 .header {
-    text-align: center;
-    color: white;
-    position: relative;
-    top: -20px;
+   text-align: center;
+   color: white;
+   position: relative;
+   top: -20px;
 }
 
 .login-box {
-    width: 400px;
-    height: 270px;
-    background-color: #ffffff;
-    border: none;
-    border-radius: 25px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+   width: 400px;
+   height: 270px;
+   background-color: #ffffff;
+   border: none;
+   border-radius: 25px;
+   display: flex;
+   justify-content: center;
+   align-items: center;
 }
 
 .btn-login {
-    background-color: rgb(158, 34, 158);
-    width: 300px;
-    border-radius: 25px;
-    color: white;
-    font-weight: 600;
-    transition: 0.5s;
+   background-color: rgb(158, 34, 158);
+   width: 300px;
+   border-radius: 25px;
+   color: white;
+   font-weight: 600;
+   transition: 0.5s;
 }
 
 .btn-login:hover {
-    background-color: rgb(88, 26, 88);
-    color: white;
+   background-color: rgb(88, 26, 88);
+   color: white;
 }
 
 .sign-up {
-    width: 300px;
-    text-align: center;
+   width: 300px;
+   text-align: center;
 }
 
 .sign-up > a {
-    text-decoration: none;
+   text-decoration: none;
 }
