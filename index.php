@@ -7,5 +7,10 @@ if (!isset($_SESSION["login"])) {
     exit;
 }
 
-header("Location: ./admin/home/home.php");
-exit;
+if ($_SESSION["hakAkses"] == "admin") {
+    header("Location: ./admin/home/home.php");
+    exit;
+} else {
+    header("Location: ./user/home/home.php");
+    exit;
+}

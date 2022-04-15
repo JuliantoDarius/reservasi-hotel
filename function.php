@@ -7,6 +7,14 @@ const FLASH_ERROR = "danger";
 const FLASH_SUCCESS = "success";
 const FLASH_INFO = "info";
 
+function cekLogin()
+{
+   if (!isset($_SESSION["login"])) {
+      header("Location: ../../index.php");
+      exit;
+   }
+}
+
 function query($query)
 {
    global $koneksi;
@@ -15,35 +23,26 @@ function query($query)
 
 // * Insert Query's
 
-function insertAkun($post, $direct)
+function insertAkunUser($post, $direct)
 {
    $username = htmlspecialchars($post["username"]);
    $password = htmlspecialchars($post["password"]);
    $konfirmasi = htmlspecialchars($post["konfirmasi"]);
-
-   if (isset($post["hakAkses"])) {
-      $hakAkses = $post["hakAkses"];
-   } else {
-      $hakAkses = "user";
-   }
+   $hakAkses = "user";
 
    if ($password !== $konfirmasi) {
       flash("not-confirmed", "Password Yang Anda Masukkan Tidak Sama", FLASH_ERROR);
+      return false;
    }
 
-   if ($hakAkses === "admin") {
-      $format = "ADM";
-   } else {
-      $format = "USR";
-   }
 
-   $query = query("SELECT id_akun FROM akun WHERE id_akun LIKE '$format%' ORDER BY id_akun DESC LIMIT 1");
+   $query = query("SELECT id_akun FROM akun WHERE id_akun LIKE 'USR%' ORDER BY id_akun DESC LIMIT 1");
 
    if (mysqli_num_rows($query) < 1) {
-      $idAkun = autoNumber($format . "0000", $format);
+      $idAkun = autoNumber("USR0000", "USR");
    } else {
       $data = mysqli_fetch_assoc($query);
-      $idAkun = autoNumber($data["id_akun"], $format);
+      $idAkun = autoNumber($data["id_akun"], "USR");
    }
 
    $value = "'$idAkun', '$username', '$password', '$hakAkses'";
@@ -53,6 +52,10 @@ function insertAkun($post, $direct)
       flash("not-inserted", "Terjadi Kesalahan Silahkan Coba Lagi", FLASH_ERROR);
       return false;
    }
+
+   $_SESSION["login"] = "sudah login";
+   $_SESSION["idAkun"] = $idAkun;
+   $_SESSION["hakAkses"] = $hakAkses;
 
    header("Location: $direct");
    exit;

@@ -1,3 +1,14 @@
+<?php
+
+session_start();
+
+if (isset($_SESSION["login"])) {
+    header("Location: ./index.php");
+    exit;
+}
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -50,7 +61,7 @@
                     <div class="row">
                         <div class="col-sm-10">
                             <p class="sign-up">
-                                Tidak Punya Akun ? <a href="./user/akun/daftar.php">Daftar</a>
+                                Tidak Punya Akun ? <a href="./register.php">Daftar</a>
                             </p>
                         </div>
                     </div>

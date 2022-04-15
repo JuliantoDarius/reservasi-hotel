@@ -10,7 +10,7 @@ if (!isset($_POST["login"])) {
 $username = $_POST["username"];
 $password = $_POST["password"];
 
-$query = query("SELECT * FROM FROM akun WHERE username = '$username' AND password = '$password'");
+$query = query("SELECT * FROM akun WHERE username = '$username' AND password = '$password'");
 
 if (mysqli_num_rows($query) < 1) {
     echo "

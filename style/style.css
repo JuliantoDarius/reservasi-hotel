@@ -27,7 +27,7 @@
 
 .login-box {
    width: 400px;
-   height: 270px;
+   height: 280px;
    background-color: #ffffff;
    border: none;
    border-radius: 25px;
@@ -57,4 +57,10 @@
 
 .sign-up > a {
    text-decoration: none;
+}
+
+.flash {
+   text-align: center;
+   margin: 0;
+   cursor: pointer;
 }
