@@ -61,7 +61,7 @@ if (isset($_SESSION["login"])) {
                     <div class="row">
                         <div class="col-sm-10">
                             <p class="sign-up">
-                                Tidak Punya Akun ? <a href="./register.php">Daftar</a>
+                                Tidak Punya Akun ? <a href="./register.php">Daftar</a> Sekarang
                             </p>
                         </div>
                     </div>

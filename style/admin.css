@@ -1,0 +1,94 @@
+:root {
+   --white: rgb(231, 231, 231);
+   --black: rgb(26, 24, 24);
+}
+
+* {
+   margin: 0;
+   padding: 0;
+}
+
+body {
+   background-color: var(--white);
+}
+
+.sidebar {
+   position: fixed;
+   width: 220px;
+   height: 100vh;
+   background-color: rgb(26, 24, 24);
+}
+
+.brand {
+   position: relative;
+   display: block;
+   color: white;
+   font-size: 30px;
+   padding: 5px 10px 70px 10px;
+   top: 20px;
+   left: -10px;
+   font-weight: 600;
+}
+
+.brand > a {
+   color: white;
+}
+
+.brand:hover {
+   color: white;
+}
+
+ul {
+   list-style: none;
+}
+
+a {
+   text-decoration: none;
+}
+
+.item {
+   margin-bottom: 15px;
+   margin-left: -35px;
+   margin-right: -20px;
+}
+
+.item > a {
+   display: block;
+   color: white;
+   padding: 15px 20px 15px 65px;
+   transition: 0.3s;
+   font-size: 18px;
+}
+
+.item > a:hover {
+   border-radius: 20px;
+   background-color: var(--white);
+   color: black;
+}
+
+.aktif {
+   border-radius: 20px;
+   background-color: var(--white);
+   color: black !important;
+}
+
+.content {
+   padding-top: 30px;
+   margin-left: 260px;
+   margin-right: 40px;
+   margin-bottom: 30px;
+}
+
+i {
+   padding-right: 7px;
+}
+
+tr {
+   text-align: center;
+}
+
+.flash {
+   text-align: center;
+   margin: 0;
+   cursor: pointer;
+}

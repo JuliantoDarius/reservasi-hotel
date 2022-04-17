@@ -6,12 +6,17 @@ const FLASH = "FLASH_MESSAGE";
 const FLASH_ERROR = "danger";
 const FLASH_SUCCESS = "success";
 const FLASH_INFO = "info";
+const FLASH_WARNING = "warning";
 
-function cekLogin()
+function cekLoginAdmin()
 {
    if (!isset($_SESSION["login"])) {
       header("Location: ../../index.php");
       exit;
+   }
+
+   if ($_SESSION["hakAkses"] !== "admin") {
+      header("Location: ../../index.php");
    }
 }
 
@@ -22,6 +27,60 @@ function query($query)
 }
 
 // * Insert Query's
+
+
+function insertFasilitas($post, $direct)
+{
+   $idFasilitas = query("SELECT id_fasilitas FROM fasilitas ORDER BY id_fasilitas DESC LIMIT 1");
+
+   $idFasilitas = autoNumber($idFasilitas, "id_fasilitas", "FLT");
+   $namaFasilitas = $post["namaFasilitas"];
+   $keterangan = $post["keterangan"];
+
+   $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
+   $idGambar = autoNumber($idGambar, "gambar", "IMG");
+   $gambar = uploadGambar($_FILES["gambar"], $idGambar);
+
+   if (isset($post["idKamar"])) {
+      $idKamar = $post["idKamar"];
+      $value = "'$idFasilitas', '$namaFasilitas', '$keterangan', '$gambar', '$idKamar'";
+   } else {
+      $value = "'$idFasilitas', '$namaFasilitas', '$keterangan', '$gambar', NULL";
+   }
+
+   $insert = insert("fasilitas", $value);
+
+   if (!$insert) {
+      flash("fasilitas-not-inserted", "Gagal Menambah Fasilitas Silahkan Coba Lagi !", FLASH_ERROR);
+      return false;
+   }
+
+   flash("fasilitas-inserted", "Berhasil Menambah Fasilitas !", FLASH_SUCCESS);
+   header("Location: $direct");
+   exit;
+}
+
+function insertKamar($post)
+{
+   $tipeKamar = htmlspecialchars($post["tipeKamar"]);
+   $jumlahKamar = htmlspecialchars($post["jumlahKamar"]);
+
+   $query = query("SELECT id_kamar FROM kamar ORDER BY id_kamar DESC LIMIT 1");
+
+   $idKamar = autoNumber($query, "id_kamar", "KMR");
+
+   $value = "'$idKamar', '$tipeKamar', '$jumlahKamar'";
+   $insert = insert("kamar", $value);
+
+   if (!$insert) {
+      flash("kamar-not-inserted", "Tidak Dapat Menambah Tipe Kamar Silahkan Coba Lagi !", FLASH_ERROR);
+      return false;
+   }
+
+   flash("kamar-inserted", "Berhasil Menambah Tipe Kamar !", FLASH_SUCCESS);
+   header("Location: ./kamar.php");
+   exit;
+}
 
 function insertAkunUser($post, $direct)
 {
@@ -38,18 +97,13 @@ function insertAkunUser($post, $direct)
 
    $query = query("SELECT id_akun FROM akun WHERE id_akun LIKE 'USR%' ORDER BY id_akun DESC LIMIT 1");
 
-   if (mysqli_num_rows($query) < 1) {
-      $idAkun = autoNumber("USR0000", "USR");
-   } else {
-      $data = mysqli_fetch_assoc($query);
-      $idAkun = autoNumber($data["id_akun"], "USR");
-   }
+   $idAkun = autoNumber($query, "id_akun", "USR");
 
    $value = "'$idAkun', '$username', '$password', '$hakAkses'";
    $insert = insert("akun", $value);
 
    if (!$insert) {
-      flash("not-inserted", "Terjadi Kesalahan Silahkan Coba Lagi", FLASH_ERROR);
+      flash("not-inserted", "Tidak Dapat Membuat Akun Silahkan Coba Lagi", FLASH_ERROR);
       return false;
    }
 
@@ -70,6 +124,66 @@ function insert($tbl, $value)
 
 // * Update Query's
 
+function updateFasilitas($post, $idFasilitas, $direct)
+{
+   $namaFasilitas = htmlspecialchars($post["namaFasilitas"]);
+   $keterangan = htmlspecialchars($post["keterangan"]);
+
+   if ($_FILES["gambar"]["error"] === 4) {
+      $gambar = $post["gambarLama"];
+   } else {
+      $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
+      $idGambar = autoNumber($idGambar, "gambar", "IMG");
+
+      $gambar = uploadGambar($_FILES["gambar"], $idGambar);
+      if (!$gambar) {
+         return false;
+      }
+
+      $deleteOldImg = "../../img/" . $post["gambarLama"];
+      if (file_exists($deleteOldImg)) {
+         unlink($deleteOldImg);
+      }
+   }
+
+   if (isset($post["idKamar"])) {
+      $idKamar = $post["idKamar"];
+      $value = "nama_fasilitas = '$namaFasilitas', keterangan = '$keterangan', gambar = '$gambar', id_kamar = '$idKamar'";
+   } else {
+      $value = "nama_fasilitas = '$namaFasilitas', keterangan = '$keterangan', gambar = '$gambar'";
+   }
+
+   $update = update("fasilitas", $value, "id_fasilitas", $idFasilitas);
+
+   if (!$update) {
+      flash("fasilitas-not-updated", "Gagal Mengupdate Fasilitas Silahkan Coba Lagi !", FLASH_ERROR);
+      return false;
+   }
+
+
+   flash("fasilitas-updated", "Berhasil Mengupdate Fasilitas !", FLASH_INFO);
+   header("Location: ./$direct");
+   exit;
+}
+
+function updateKamar($post, $idKamar)
+{
+   $tipeKamar = htmlspecialchars($post["tipeKamar"]);
+   $jumlahKamar = htmlspecialchars($post["jumlahKamar"]);
+
+   $value = "tipe_kamar = '$tipeKamar', jumlah_kamar = '$jumlahKamar'";
+   $update = update("kamar", $value, "id_kamar", $idKamar);
+
+   if (!$update) {
+      flash("kamar-not-updated", "Tidak Dapat Mengupdate Tipe Kamar Silahkan Coba Lagi !", FLASH_ERROR);
+      return false;
+   }
+
+   flash("kamar-updated", "Berhasil Mengupdate Tipe Kamar !", FLASH_INFO);
+   header("Location: ./kamar.php");
+   exit;
+}
+
 function update($tbl, $value, $unique, $uniqueValue)
 {
    $query = "UPDATE $tbl SET $value WHERE $unique = '$uniqueValue'";
@@ -86,8 +200,14 @@ function delete($tbl, $unique, $uniqueValue)
    return $delete;
 }
 
-function autoNumber($str, $format)
+function autoNumber($query, $key, $format)
 {
+   if (mysqli_num_rows($query) < 1) {
+      $str = $format . "0000";
+   } else {
+      $data = mysqli_fetch_assoc($query);
+      $str = $data[$key];
+   }
    $split = substr($str, 3);
    $angka = (int) $split + 1;
    if ($angka >= 1000) {
@@ -146,4 +266,38 @@ function displayMessage($name)
    unset($_SESSION[FLASH][$name]);
 
    echo formatFlashMessage($flashSession);
+}
+
+function cekFlashMessage($name)
+{
+   if (isset($_SESSION[FLASH][$name])) {
+      flash($name);
+   } else {
+      return;
+   }
+}
+
+function formatAngka($angka)
+{
+   return number_format($angka, 0, ",", ".");
+}
+
+function uploadGambar($files, $namaGambarBaru)
+{
+   $namaGambar = $files["name"];
+   $tmpName = $files["tmp_name"];
+   $ekstensiGambar = explode(".", $namaGambar);
+   $ekstensiGambar = strtolower(end($ekstensiGambar));
+
+   $ekstensiGambarValid = ["jpg", "jpeg", "png"];
+
+   if (!in_array($ekstensiGambar, $ekstensiGambarValid)) {
+      flash("false-extention", "Gagal Mengupload Gambar ! Silahkan Upload Gambar Yang Berekstensi jpg, jpeg, atau png", FLASH_WARNING);
+      return false;
+   }
+
+   $gambar = $namaGambarBaru . "." . $ekstensiGambar;
+
+   move_uploaded_file($tmpName, "../../img/" . $gambar);
+   return $gambar;
 }
