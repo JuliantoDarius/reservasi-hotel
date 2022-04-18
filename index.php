@@ -10,6 +10,9 @@ if (!isset($_SESSION["login"])) {
 if ($_SESSION["hakAkses"] == "admin") {
     header("Location: ./admin/home/home.php");
     exit;
+} else  if ($_SESSION["hakAkses"] == "resepsionis") {
+    header("Location: ./resepsionis/home/home.php");
+    exit;
 } else {
     header("Location: ./user/home/home.php");
     exit;

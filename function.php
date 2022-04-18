@@ -8,7 +8,7 @@ const FLASH_SUCCESS = "success";
 const FLASH_INFO = "info";
 const FLASH_WARNING = "warning";
 
-function cekLoginAdmin()
+function cekLogin()
 {
    if (!isset($_SESSION["login"])) {
       header("Location: ../../index.php");
@@ -34,8 +34,8 @@ function insertFasilitas($post, $direct)
    $idFasilitas = query("SELECT id_fasilitas FROM fasilitas ORDER BY id_fasilitas DESC LIMIT 1");
 
    $idFasilitas = autoNumber($idFasilitas, "id_fasilitas", "FLT");
-   $namaFasilitas = $post["namaFasilitas"];
-   $keterangan = $post["keterangan"];
+   $namaFasilitas = htmlspecialchars($post["namaFasilitas"]);
+   $keterangan = htmlspecialchars($post["keterangan"]);
 
    $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
    $idGambar = autoNumber($idGambar, "gambar", "IMG");
@@ -82,12 +82,26 @@ function insertKamar($post)
    exit;
 }
 
-function insertAkunUser($post, $direct)
+function insertAkun($post, $direct)
 {
    $username = htmlspecialchars($post["username"]);
    $password = htmlspecialchars($post["password"]);
    $konfirmasi = htmlspecialchars($post["konfirmasi"]);
-   $hakAkses = "user";
+
+   if (isset($post["hakAkses"])) {
+      $hakAkses = $post["hakAkses"];
+      if ($hakAkses === "admin") {
+         $format = "ADM";
+      } else if ($hakAkses === "resepsionis") {
+         $format = "RSR";
+      } else {
+         $format = "USR";
+      }
+   } else {
+      $hakAkses = "user";
+      $format = "USR";
+   }
+
 
    if ($password !== $konfirmasi) {
       flash("not-confirmed", "Password Yang Anda Masukkan Tidak Sama", FLASH_ERROR);
@@ -95,24 +109,30 @@ function insertAkunUser($post, $direct)
    }
 
 
-   $query = query("SELECT id_akun FROM akun WHERE id_akun LIKE 'USR%' ORDER BY id_akun DESC LIMIT 1");
+   $query = query("SELECT id_akun FROM akun WHERE id_akun LIKE '$format%' ORDER BY id_akun DESC LIMIT 1");
 
-   $idAkun = autoNumber($query, "id_akun", "USR");
+   $idAkun = autoNumber($query, "id_akun", "$format");
 
    $value = "'$idAkun', '$username', '$password', '$hakAkses'";
    $insert = insert("akun", $value);
 
    if (!$insert) {
-      flash("not-inserted", "Tidak Dapat Membuat Akun Silahkan Coba Lagi", FLASH_ERROR);
+      flash("akun-not-inserted", "Terjadi Kesalahan ! Tidak Dapat Membuat Akun Silahkan Coba Lagi", FLASH_ERROR);
       return false;
    }
 
-   $_SESSION["login"] = "sudah login";
-   $_SESSION["idAkun"] = $idAkun;
-   $_SESSION["hakAkses"] = $hakAkses;
+   if (isset($_SESSION["hakAkses"])) {
+      flash("akun-inserted", "Berhasil Menambah Akun !", FLASH_SUCCESS);
+      header("Location: $direct");
+      exit;
+   } else {
+      $_SESSION["login"] = "sudah login";
+      $_SESSION["idAkun"] = $idAkun;
+      $_SESSION["hakAkses"] = $hakAkses;
 
-   header("Location: $direct");
-   exit;
+      header("Location: $direct");
+      exit;
+   }
 }
 
 function insert($tbl, $value)
@@ -123,6 +143,35 @@ function insert($tbl, $value)
 }
 
 // * Update Query's
+
+function updateAkun($post, $idAkun)
+{
+   $username = htmlspecialchars($post["username"]);
+
+   if ($post["password"] === "" && $post["konfirmasi"] === "") {
+      $password = $post["passwordLama"];
+   } else {
+      $password = htmlspecialchars($post["password"]);
+      $konfirmasi = htmlspecialchars($post["konfirmasi"]);
+      if ($password !== $konfirmasi) {
+         flash("not-confirmed", "Password Yang Anda Masukkan Tidak Sama", FLASH_ERROR);
+         return false;
+      }
+   }
+
+   $hakAkses = $post["hakAkses"];
+
+   $value = "username = '$username', password = '$password', hak_akses = '$hakAkses'";
+   $update = update("akun", $value, "id_akun", $idAkun);
+   if (!$update) {
+      flash("akun-not-updated", "Gagal Mengupdate Akun Silahkan Coba Lagi !", FLASH_ERROR);
+      return false;
+   }
+
+   flash("akun-updated", "Berhasil Mengupdate Akun !", FLASH_INFO);
+   header("Location: ./akun.php");
+   exit;
+}
 
 function updateFasilitas($post, $idFasilitas, $direct)
 {

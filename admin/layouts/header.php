@@ -1,4 +1,4 @@
-<?php cekLoginAdmin(); ?>
+<?php cekLogin(); ?>
 
 <!doctype html>
 <html lang="en">
@@ -21,9 +21,18 @@
 
   <div class="sidebar">
     <ul>
-      <li class="brand"><a href="../home/home.php">JOY HOTEL</a></li>
-      <li class="item"><a href="../home/home.php" class="<?= ($_SESSION["aktif"] === "home") ? "aktif" : "" ?>"><i class="fa-solid fa-house"></i>Home</a></li>
-      <li class="item"><a href="../kamar/kamar.php" class="<?= ($_SESSION["aktif"] === "kamar") ? "aktif" : "" ?>"><i class="fa-solid fa-bed"></i>Kamar</a></li>
+      <li class="brand">
+        <a href="../home/home.php">JOY HOTEL</a>
+      </li>
+      <li class="item">
+        <a href="../home/home.php" class="<?= ($_SESSION["aktif"] === "home") ? "aktif" : "" ?>">
+          <i class="fa-solid fa-house"></i>Home
+        </a>
+      </li>
+      <li class="item">
+        <a href="../kamar/kamar.php" class="<?= ($_SESSION["aktif"] === "kamar") ? "aktif" : "" ?>"><i class="fa-solid fa-bed"></i>Kamar
+        </a>
+      </li>
 
       <li class="item dropdown">
         <a href="#" class="<?= ($_SESSION["aktif"] === "fasilitas") ? "aktif" : "" ?>" id="dropdownMenuLink" data-bs-toggle="dropdown">
@@ -31,12 +40,25 @@
         </a>
 
         <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-          <li><a class="dropdown-item" href="../fasilitas/fasilitasKamar.php">Fasilitas Kamar</a></li>
-          <li><a class="dropdown-item" href="../fasilitas/fasilitasHotel.php">Fasilitas Hotel</a></li>
+          <li>
+            <a class="dropdown-item" href="../fasilitas/fasilitasKamar.php">Fasilitas Kamar
+            </a>
+          </li>
+          <li>
+            <a class="dropdown-item" href="../fasilitas/fasilitasHotel.php">Fasilitas Hotel</a>
+          </li>
         </ul>
       </li>
 
-      <li class="item"><a href="../../logout.php" onclick="return confirm('Apakah Anda Yakin Ingin Keluar ?')"><i class="fa-solid fa-arrow-right-from-bracket"></i>Sign-out</a></li>
+      <li class="item">
+        <a href="../akun/akun.php" class="<?= ($_SESSION["aktif"] === "akun") ? "aktif" : "" ?>"><i class="fa-solid fa-users"></i>Akun
+        </a>
+      </li>
+
+      <li class="item">
+        <a href="../../logout.php" onclick="return confirm('Apakah Anda Yakin Ingin Keluar ?')"><i class="fa-solid fa-arrow-right-from-bracket"></i>Sign-Out
+        </a>
+      </li>
     </ul>
   </div>
 

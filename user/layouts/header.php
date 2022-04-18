@@ -1,3 +1,4 @@
+<?php cekLogin(); ?>
 <!doctype html>
 <html lang="en">
 

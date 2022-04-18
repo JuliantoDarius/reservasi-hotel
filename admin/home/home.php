@@ -16,6 +16,8 @@ $jumlahKamar = mysqli_fetch_assoc($queryKamar)["jumlah_kamar"];
 $queryFasilitas = query("SELECT COUNT(id_fasilitas) AS \"jumlah_fasilitas\" FROM fasilitas");
 $jumlahFasilitas = mysqli_fetch_assoc($queryFasilitas)["jumlah_fasilitas"];
 
+$queryDataFasilitas = query("SELECT * FROM fasilitas ORDER BY id_fasilitas DESC");
+
 ?>
 
 <div class="row mb-5">
@@ -59,20 +61,26 @@ $jumlahFasilitas = mysqli_fetch_assoc($queryFasilitas)["jumlah_fasilitas"];
       </tr>
    </thead>
    <tbody>
-
-      <?php
-      $no = 1;
-      $query = query("SELECT * FROM fasilitas ORDER BY id_fasilitas DESC");
-      while ($data = mysqli_fetch_assoc($query)) :
-
-      ?>
+      <?php if (mysqli_num_rows($queryDataFasilitas) < 1) : ?>
          <tr>
-            <th scope="row"><?= $no++; ?></th>
-            <td><?= ucwords($data["nama_fasilitas"]); ?></td>
-            <td><?= $data["gambar"]; ?></td>
-            <td><?= $data["id_kamar"]; ?></td>
+            <td colspan="4" class="table-warning">Tidak Ada Fasilitas Yang Tersedia</td>
          </tr>
-      <?php endwhile; ?>
+      <?php else : ?>
+
+         <?php
+
+         $no = 1;
+         while ($data = mysqli_fetch_assoc($queryDataFasilitas)) :
+
+         ?>
+            <tr>
+               <th scope="row"><?= $no++; ?></th>
+               <td><?= ucwords($data["nama_fasilitas"]); ?></td>
+               <td><?= $data["gambar"]; ?></td>
+               <td><?= $data["id_kamar"]; ?></td>
+            </tr>
+         <?php endwhile; ?>
+      <?php endif; ?>
    </tbody>
 </table>
 

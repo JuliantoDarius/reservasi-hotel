@@ -3,7 +3,7 @@
 require_once("../../function.php");
 
 $_SESSION["aktif"] = basename(__DIR__);
-$_SESSION["fileAktif"] = basename(__FILE__, ".php");
+$_SESSION["fileAktif"] = "Tambah Kamar";
 
 require_once("../layouts/header.php");
 

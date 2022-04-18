@@ -60,7 +60,7 @@ $query = query("SELECT * FROM fasilitas INNER JOIN kamar ON fasilitas.id_kamar =
 </table>
 
 <div class="text-end">
-   <a href="./tambahFasilitasKamar.php"><img src="../../img/add.png" width="50" title="Tambah Tipe Kamar"></a>
+   <a href="./tambahFasilitasKamar.php"><img src="../../img/add.png" width="50" title="Tambah Fasilitas Kamar"></a>
 </div>
 
 

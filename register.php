@@ -3,7 +3,7 @@
 require_once("./function.php");
 
 if (isset($_POST["register"])) {
-   insertAkunUser($_POST, "./index.php");
+   insertAkun($_POST, "./index.php");
 }
 
 ?>
@@ -30,7 +30,7 @@ if (isset($_POST["register"])) {
          flash("not-confirmed");
       }
       if (isset($_SESSION[FLASH]["not-inserted"])) {
-         flash("not-inserted");
+         flash("akun-not-inserted");
       }
       ?>
    </div>
@@ -43,7 +43,6 @@ if (isset($_POST["register"])) {
       <div class="register-box">
          <h1 class="header">SIGN-UP</h1>
          <form action="" method="post">
-
             <div class="mb-3">
                <label for='username'>Username</label>
                <input type='text' name='username' id='username' autocomplete="off" required placeholder="Masukkan Username">
