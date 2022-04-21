@@ -8,15 +8,16 @@ const FLASH_SUCCESS = "success";
 const FLASH_INFO = "info";
 const FLASH_WARNING = "warning";
 
-function cekLogin()
+function cekLogin($hakAkses)
 {
    if (!isset($_SESSION["login"])) {
       header("Location: ../../index.php");
       exit;
    }
 
-   if ($_SESSION["hakAkses"] !== "admin") {
+   if ($_SESSION["hakAkses"] !== $hakAkses) {
       header("Location: ../../index.php");
+      exit;
    }
 }
 
@@ -28,6 +29,46 @@ function query($query)
 
 // * Insert Query's
 
+function insertReservasi($post)
+{
+   $idReservasi = query("SELECT id_reservasi FROM reservasi ORDER BY id_reservasi DESC LIMIT 1");
+   $idReservasi = autoNumber($idReservasi, "id_reservasi", "RSV");
+   $idAkun = $_SESSION["idAkun"];
+   $idKamar = $post["idKamar"];
+
+   $namaPemesan = htmlspecialchars($post["namaPemesan"]);
+   $email = htmlspecialchars($post["email"]);
+   $noHp = htmlspecialchars($post["noHp"]);
+   $namaTamu = htmlspecialchars($post["namaTamu"]);
+   $jumlahKamar = $post["jumlahKamar"];
+   $checkin = date("Y-m-d", strtotime($post["check-in"]));
+   $checkout = date("Y-m-d", strtotime($post["check-out"]));
+
+   $value = "
+      '$idReservasi',
+      '$idAkun',
+      '$idKamar',
+      '$namaPemesan',
+      '$email',
+      '$noHp',
+      '$namaTamu',
+      '$jumlahKamar',
+      '$checkin',
+      '$checkout'
+   ";
+
+   $insert = insert("reservasi", $value);
+   if (!$insert) {
+      flash("reservasi", "Gagal Melakukan Reservasi Silahkan Coba Lagi !", FLASH_ERROR);
+      header("Location: ../home/home.php");
+      exit;
+      return false;
+   }
+
+   flash("reservasi", "Berhasil Melakukan Reservasi ! Silahkan Cetak Bukti Reservasi !", FLASH_SUCCESS);
+   header("Location: ../reservasi/reservasiUser.php");
+   exit;
+}
 
 function insertFasilitas($post, $direct)
 {

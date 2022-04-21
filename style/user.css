@@ -1,10 +1,98 @@
+:root {
+   --white: rgb(231, 231, 231);
+}
+
 * {
    margin: 0;
    padding: 0;
 }
 
+body {
+   background-color: var(--white);
+}
+
 .flash {
    text-align: center;
    margin: 0;
+   cursor: pointer;
+}
+
+.content {
+   margin: 30px 40px 30px 40px;
+}
+
+i {
+   font-size: 25px;
+   cursor: pointer;
+}
+
+.date-icon {
+   position: relative;
+   top: 4px;
+}
+
+.bed-icon {
+   position: relative;
+   top: 5px;
+}
+
+.search-icon {
+   position: relative;
+   left: -35px;
+}
+
+.datepicker {
+   cursor: pointer;
+}
+
+tr,
+td {
+   text-align: center;
+}
+
+.date-label {
+   padding: 0 30px !important;
+}
+
+.jumlah-label {
+   padding: 0 45px !important;
+}
+
+.float-left {
+   width: 25vw;
+   float: left;
+   margin-right: 20px;
+}
+
+img {
+   height: 400px;
+}
+
+.tombol-pesan {
+   margin-left: 20px;
+   width: 14vw;
+}
+
+.article > h1 {
+   font-weight: 600;
+}
+
+.article > p {
+   font-size: 20px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+.card-text > span {
    cursor: pointer;
 }

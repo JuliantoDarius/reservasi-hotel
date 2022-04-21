@@ -1,4 +1,4 @@
-<?php cekLogin(); ?>
+<?php cekLogin("admin"); ?>
 
 <!doctype html>
 <html lang="en">

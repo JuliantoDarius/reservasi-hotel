@@ -41,7 +41,7 @@ if (isset($_SESSION["login"])) {
                     <div class="mb-4 mt-4 row">
                         <label for="username" class="col-sm-2 col-form-label"><i class="fa-solid fa-user"></i></label>
                         <div class="col-sm-10">
-                            <input type="text" name="username" class="form-control" id="username" placeholder="Username" required autocomplete="off">
+                            <input type="text" name="username" class="form-control" id="username" placeholder="Username" autofocus required autocomplete="off">
                         </div>
                     </div>
                     <div class="mb-4 row">
@@ -50,7 +50,6 @@ if (isset($_SESSION["login"])) {
                             <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
                         </div>
                     </div>
-
 
                     <div class="mb-3 row">
                         <div class="col-sm-10">
