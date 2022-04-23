@@ -41,6 +41,20 @@ function insertReservasi($post)
    $noHp = htmlspecialchars($post["noHp"]);
    $namaTamu = htmlspecialchars($post["namaTamu"]);
    $jumlahKamar = $post["jumlahKamar"];
+
+   $dataKamar = query("SELECT jumlah_kamar FROM kamar WHERE id_kamar = '$idKamar'");
+   $dataKamar = mysqli_fetch_assoc($dataKamar)["jumlah_kamar"];
+   $jumlahKamarTersedia = $dataKamar - $jumlahKamar;
+   if ($jumlahKamarTersedia < 0) {
+      $sisaKamar = abs($dataKamar);
+      flash("reservasi", "Hanya Tersisa $sisaKamar Kamar Yang Tersedia Untuk Tipe Kamar Ini", FLASH_WARNING);
+      header("Location: ../home/home.php");
+      exit;
+   }
+
+   $valueUpdate = "jumlah_kamar = '$jumlahKamarTersedia'";
+   update("kamar", $valueUpdate, "id_kamar", $idKamar);
+
    $checkin = date("Y-m-d", strtotime($post["check-in"]));
    $checkout = date("Y-m-d", strtotime($post["check-out"]));
 
@@ -62,7 +76,6 @@ function insertReservasi($post)
       flash("reservasi", "Gagal Melakukan Reservasi Silahkan Coba Lagi !", FLASH_ERROR);
       header("Location: ../home/home.php");
       exit;
-      return false;
    }
 
    flash("reservasi", "Berhasil Melakukan Reservasi ! Silahkan Cetak Bukti Reservasi !", FLASH_SUCCESS);

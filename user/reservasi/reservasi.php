@@ -3,6 +3,7 @@
 require_once("../../function.php");
 
 if (isset($_POST["pesan"])) {
+   $today = date("d-m-Y", time());
    $checkin = $_POST["check-in"];
    $checkout = $_POST["check-out"];
    $jumlahKamar = $_POST["jumlahKamar"];
@@ -15,7 +16,7 @@ if (isset($_POST["pesan"])) {
       flash("isi-tanggal-checkout", "Anda Harus Menentukan Tanggal Check-out", FLASH_WARNING);
       header("Location: ../home/home.php");
       exit;
-   } else if (strtotime($checkin) > strtotime($checkout)) {
+   } else if (strtotime($checkin) >= strtotime($checkout) || strtotime($today) > strtotime($checkin)) {
       flash("tidak-valid", "Tanggal Check-in dan Check-out Tidak Valid", FLASH_WARNING);
       header("Location: ../home/home.php");
       exit;
