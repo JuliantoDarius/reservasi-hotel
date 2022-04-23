@@ -15,6 +15,7 @@ if (isset($_POST["tambah"])) {
 
 <div id="alert" class="mb-3">
    <?php
+   cekFlashMessage("username-taken");
    cekFlashMessage("not-confirmed");
    cekFlashMessage("akun-not-inserted");
    ?>

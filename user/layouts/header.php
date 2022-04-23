@@ -39,6 +39,7 @@ if (isset($_SESSION["hakAkses"])) {
 <body>
    <div id="alert">
       <?php
+      flash("tidak-valid");
       flash("isi-tanggal-checkin");
       flash("isi-tanggal-checkout");
       flash("isi-jumlahKamar");
@@ -51,10 +52,10 @@ if (isset($_SESSION["hakAkses"])) {
          <a class="navbar-brand fs-2" href="../home/home.php">JOY HOTEL</a>
          <ul class="navbar-nav nav justify-content-end">
             <li class="nav-item">
-               <a class="nav-link <?= ($_SESSION["aktif"] === "home") ? "active" : "" ?>" href="#">Home</a>
+               <a class="nav-link <?= ($_SESSION["aktif"] === "home") ? "active" : "" ?>" href="../home/home.php">Home</a>
             </li>
             <li class="nav-item">
-               <a class="nav-link <?= ($_SESSION["aktif"] === "kamar") ? "active" : "" ?>" href="#">Kamar</a>
+               <a class="nav-link <?= ($_SESSION["aktif"] === "kamar") ? "active" : "" ?>" href="../kamar/kamar.php">Kamar</a>
             </li>
             <li class="nav-item">
                <a class="nav-link <?= ($_SESSION["aktif"] === "fasilitas") ? "active" : "" ?>" href="../fasilitas/fasilitas.php">Fasilitas</a>
@@ -65,7 +66,7 @@ if (isset($_SESSION["hakAkses"])) {
                </li>
             <?php else : ?>
                <li class="nav-item">
-                  <a class="nav-link <?= ($_SESSION["aktif"] === "reservasi") ? "active" : "" ?>" href="#">Reservasi</a>
+                  <a class="nav-link <?= ($_SESSION["aktif"] === "reservasi") ? "active" : "" ?>" href="../reservasi/riwayatReservasi.php">Reservasi</a>
                </li>
                <li class="nav-item">
                   <a class="nav-link btn btn-outline-danger" href="../../logout.php" style="width: 100px; margin-left: 20px;" onclick="return confirm('Apakah Anda Yakin Ingin Keluar ?')">Sign-Out</a>
@@ -75,7 +76,7 @@ if (isset($_SESSION["hakAkses"])) {
       </div>
    </nav>
 
-   <?php if ($_SESSION["aktif"] !== "kamar") : ?>
+   <?php if ($_SESSION["aktif"] !== "kamar" && $_SESSION["aktif"] !== "reservasi") : ?>
 
       <div id="carouselExampleCaptions" class="carousel slide mb-3" data-bs-ride="carousel">
          <div class="carousel-indicators">
@@ -116,6 +117,5 @@ if (isset($_SESSION["hakAkses"])) {
          </button>
       </div>
 
-   <?php endif; ?>
-
-   <div class="content">
+      <div class="content">
+      <?php endif; ?>

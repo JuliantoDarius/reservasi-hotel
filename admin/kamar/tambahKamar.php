@@ -13,7 +13,10 @@ if (isset($_POST["tambah"])) {
 ?>
 
 <div id="alert" class="mb-3">
-   <?php cekFlashMessage("kamar-not-inserted"); ?>
+   <?php
+   cekFlashMessage("tipeKamar-taken");
+   cekFlashMessage("kamar-not-inserted");
+   ?>
 </div>
 
 <form action="" method="post">
@@ -27,7 +30,7 @@ if (isset($_POST["tambah"])) {
    <div class="row">
       <label for="jumlahKamar" class="col-2 col-form-label">Jumlah Kamar</label>
       <div class="col-3">
-         <input type="number" class="form-control" id="jumlahKamar" name="jumlahKamar" required autocomplete="off">
+         <input type="number" class="form-control" id="jumlahKamar" min="0" name="jumlahKamar" required autocomplete="off">
       </div>
    </div>
 

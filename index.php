@@ -8,7 +8,7 @@ if (!isset($_SESSION["login"])) {
 }
 
 if ($_SESSION["hakAkses"] == "admin") {
-    header("Location: ./admin/home/home.php");
+    header("Location: ./admin/kamar/kamar.php");
     exit;
 } else  if ($_SESSION["hakAkses"] == "resepsionis") {
     header("Location: ./resepsionis/home/home.php");

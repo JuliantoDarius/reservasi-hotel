@@ -29,16 +29,24 @@ $query = query("SELECT * FROM kamar ORDER BY id_kamar DESC");
       </tr>
    </thead>
    <tbody>
-      <?php while ($data = mysqli_fetch_assoc($query)) : ?>
+      <?php if (mysqli_num_rows($query) < 1) : ?>
          <tr>
-            <th scope="row"><?= ucwords($data["tipe_kamar"]); ?></th>
-            <td><?= formatAngka($data["jumlah_kamar"]); ?></td>
-            <td>
-               <a href="./editKamar.php?id=<?= $data["id_kamar"]; ?>" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i>Edit</a>
-               <a href="./hapusKamar.php?id=<?= $data["id_kamar"]; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Tipe Kamar <?= ucwords($data['tipe_kamar']); ?> ?')"><i class="fa-regular fa-trash-can"></i>Hapus</a>
+            <td colspan="3" class="table-danger">
+               Belum Ada Tipe Kamar Yang Tersedia
             </td>
          </tr>
-      <?php endwhile; ?>
+      <?php else : ?>
+         <?php while ($data = mysqli_fetch_assoc($query)) : ?>
+            <tr>
+               <th scope="row"><?= ucwords($data["tipe_kamar"]); ?></th>
+               <td><?= formatAngka($data["jumlah_kamar"]); ?></td>
+               <td>
+                  <a href="./editKamar.php?id=<?= $data["id_kamar"]; ?>" class="btn btn-warning"><i class="fa-regular fa-pen-to-square"></i>Edit</a>
+                  <a href="./hapusKamar.php?id=<?= $data["id_kamar"]; ?>" class="btn btn-danger" onclick="return confirm('Apakah Anda Yakin Ingin Menghapus Tipe Kamar <?= ucwords($data['tipe_kamar']); ?> ?')"><i class="fa-regular fa-trash-can"></i>Hapus</a>
+               </td>
+            </tr>
+         <?php endwhile; ?>
+      <?php endif; ?>
    </tbody>
 </table>
 

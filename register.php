@@ -32,6 +32,7 @@ if (isset($_POST["register"])) {
       if (isset($_SESSION[FLASH]["not-inserted"])) {
          flash("akun-not-inserted");
       }
+      flash("username-taken");
       ?>
    </div>
 

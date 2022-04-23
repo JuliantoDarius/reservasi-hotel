@@ -22,7 +22,7 @@ require_once("../layouts/header.php");
 
    <div class="row float-left">
       <div class="col-10">
-         <input type="text" id="check-out" class="form-control datepicker" placeholder="Tanggal Check-in" onchange="handlePesan();">
+         <input type="text" id="check-out" class="form-control datepicker" placeholder="Tanggal Check-out" onchange="handlePesan();">
       </div>
       <div class="col-2">
          <label for="check-out">

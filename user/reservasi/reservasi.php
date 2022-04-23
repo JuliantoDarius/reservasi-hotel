@@ -15,7 +15,12 @@ if (isset($_POST["pesan"])) {
       flash("isi-tanggal-checkout", "Anda Harus Menentukan Tanggal Check-out", FLASH_WARNING);
       header("Location: ../home/home.php");
       exit;
+   } else if (strtotime($checkin) > strtotime($checkout)) {
+      flash("tidak-valid", "Tanggal Check-in dan Check-out Tidak Valid", FLASH_WARNING);
+      header("Location: ../home/home.php");
+      exit;
    }
+
    if ($jumlahKamar == "") {
       flash("isi-jumlahKamar", "Anda Harus Menentukan Jumlah Kamar Yang Ingin Anda Pesan", FLASH_WARNING);
       header("Location: ../home/home.php");

@@ -21,14 +21,7 @@
 
   <div class="sidebar">
     <ul>
-      <li class="brand">
-        <a href="../home/home.php">JOY HOTEL</a>
-      </li>
-      <li class="item">
-        <a href="../home/home.php" class="<?= ($_SESSION["aktif"] === "home") ? "aktif" : "" ?>">
-          <i class="fa-solid fa-house"></i>Home
-        </a>
-      </li>
+      <li class="brand">JOY HOTEL</li>
       <li class="item">
         <a href="../kamar/kamar.php" class="<?= ($_SESSION["aktif"] === "kamar") ? "aktif" : "" ?>"><i class="fa-solid fa-bed"></i>Kamar
         </a>

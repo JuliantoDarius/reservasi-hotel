@@ -9,9 +9,11 @@ if (!isset($_GET["id"])) {
 
 $idKamar = $_GET["id"];
 
+$deleteFasilitas = delete("fasilitas", "id_kamar", $idKamar);
+$deleteReservasi = delete("reservasi", "id_kamar", $idKamar);
 $delete = delete("kamar", "id_kamar", $idKamar);
 
-if (!$delete) {
+if (!$delete || !$deleteFasilitas || !$deleteReservasi) {
    flash("hapus-kamar", "Gagal Menghapus Tipe Kamar Silahkan Coba Lagi !", FLASH_ERROR);
    header("Location: ./kamar.php");
    exit;

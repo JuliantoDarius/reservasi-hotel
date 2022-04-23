@@ -66,7 +66,7 @@ function insertReservasi($post)
    }
 
    flash("reservasi", "Berhasil Melakukan Reservasi ! Silahkan Cetak Bukti Reservasi !", FLASH_SUCCESS);
-   header("Location: ../reservasi/reservasiUser.php");
+   header("Location: ../reservasi/riwayatReservasi.php");
    exit;
 }
 
@@ -75,17 +75,36 @@ function insertFasilitas($post, $direct)
    $idFasilitas = query("SELECT id_fasilitas FROM fasilitas ORDER BY id_fasilitas DESC LIMIT 1");
 
    $idFasilitas = autoNumber($idFasilitas, "id_fasilitas", "FLT");
-   $namaFasilitas = htmlspecialchars($post["namaFasilitas"]);
+   $namaFasilitas = strtolower(htmlspecialchars($post["namaFasilitas"]));
    $keterangan = htmlspecialchars($post["keterangan"]);
-
-   $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
-   $idGambar = autoNumber($idGambar, "gambar", "IMG");
-   $gambar = uploadGambar($_FILES["gambar"], $idGambar);
 
    if (isset($post["idKamar"])) {
       $idKamar = $post["idKamar"];
+
+      if (!cekTable("fasilitas", "id_kamar", $idKamar, "nama_fasilitas", $namaFasilitas)) {
+         $query = query("SELECT tipe_kamar FROM kamar WHERE id_kamar = '$idKamar'");
+         $data = mysqli_fetch_assoc($query);
+         $tipeKamar = ucwords($data["tipe_kamar"]);
+
+         flash("fasilitas-sudah-ada", "Fasilitas Ini Sudah Tersedia Di Tipe Kamar $tipeKamar", FLASH_ERROR);
+         return false;
+      }
+
+      $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
+      $idGambar = autoNumber($idGambar, "gambar", "IMG");
+      $gambar = uploadGambar($_FILES["gambar"], $idGambar);
+
       $value = "'$idFasilitas', '$namaFasilitas', '$keterangan', '$gambar', '$idKamar'";
    } else {
+      if (!cekTable("fasilitas", "nama_fasilitas", $namaFasilitas, "id_kamar", "NULL")) {
+         flash("fasilitasHotel-sudah-ada", "Fasilitas Ini Sudah Tersedia", FLASH_ERROR);
+         return false;
+      }
+
+      $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
+      $idGambar = autoNumber($idGambar, "gambar", "IMG");
+      $gambar = uploadGambar($_FILES["gambar"], $idGambar);
+
       $value = "'$idFasilitas', '$namaFasilitas', '$keterangan', '$gambar', NULL";
    }
 
@@ -103,7 +122,13 @@ function insertFasilitas($post, $direct)
 
 function insertKamar($post)
 {
-   $tipeKamar = htmlspecialchars($post["tipeKamar"]);
+   $tipeKamar = strtolower(htmlspecialchars($post["tipeKamar"]));
+
+   if (!cekTable("kamar", "tipe_kamar", $tipeKamar)) {
+      flash("tipeKamar-taken", "Tipe Kamar Ini Sudah Ada !", FLASH_ERROR);
+      return false;
+   }
+
    $jumlahKamar = htmlspecialchars($post["jumlahKamar"]);
 
    $query = query("SELECT id_kamar FROM kamar ORDER BY id_kamar DESC LIMIT 1");
@@ -125,9 +150,15 @@ function insertKamar($post)
 
 function insertAkun($post, $direct)
 {
-   $username = htmlspecialchars($post["username"]);
-   $password = htmlspecialchars($post["password"]);
-   $konfirmasi = htmlspecialchars($post["konfirmasi"]);
+   $username = strtolower(htmlspecialchars($post["username"]));
+
+   if (!cekTable("akun", "username", $username)) {
+      flash("username-taken", "Maaf Username Telah Digunakan !", FLASH_ERROR);
+      return false;
+   }
+
+   $password = strtolower(htmlspecialchars($post["password"]));
+   $konfirmasi = strtolower(htmlspecialchars($post["konfirmasi"]));
 
    if (isset($post["hakAkses"])) {
       $hakAkses = $post["hakAkses"];
@@ -187,7 +218,14 @@ function insert($tbl, $value)
 
 function updateAkun($post, $idAkun)
 {
-   $username = htmlspecialchars($post["username"]);
+   $username = strtolower(htmlspecialchars($post["username"]));
+   $usernameLama = strtolower($post["usernameLama"]);
+   if ($username !== $usernameLama) {
+      if (!cekTable("akun", "username", $username)) {
+         flash("username-taken", "Maaf Username Telah Digunakan !", FLASH_ERROR);
+         return false;
+      }
+   }
 
    if ($post["password"] === "" && $post["konfirmasi"] === "") {
       $password = $post["passwordLama"];
@@ -216,30 +254,67 @@ function updateAkun($post, $idAkun)
 
 function updateFasilitas($post, $idFasilitas, $direct)
 {
-   $namaFasilitas = htmlspecialchars($post["namaFasilitas"]);
+   $namaFasilitas = strtolower(htmlspecialchars($post["namaFasilitas"]));
    $keterangan = htmlspecialchars($post["keterangan"]);
 
-   if ($_FILES["gambar"]["error"] === 4) {
-      $gambar = $post["gambarLama"];
-   } else {
-      $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
-      $idGambar = autoNumber($idGambar, "gambar", "IMG");
-
-      $gambar = uploadGambar($_FILES["gambar"], $idGambar);
-      if (!$gambar) {
-         return false;
-      }
-
-      $deleteOldImg = "../../img/" . $post["gambarLama"];
-      if (file_exists($deleteOldImg)) {
-         unlink($deleteOldImg);
-      }
-   }
-
+   $namaFasilitasLama = strtolower($post["namaFasilitasLama"]);
    if (isset($post["idKamar"])) {
       $idKamar = $post["idKamar"];
+
+      if ($namaFasilitas !== $namaFasilitasLama) {
+         if (!cekTable("fasilitas", "id_kamar", $idKamar, "nama_fasilitas", $namaFasilitas)) {
+            $query = query("SELECT tipe_kamar FROM kamar WHERE id_kamar = '$idKamar'");
+            $data = mysqli_fetch_assoc($query);
+            $tipeKamar = ucwords($data["tipe_kamar"]);
+
+            flash("fasilitas-sudah-ada", "Fasilitas Ini Sudah Tersedia Di Tipe Kamar $tipeKamar", FLASH_ERROR);
+            return false;
+         }
+      }
+
+      if ($_FILES["gambar"]["error"] === 4) {
+         $gambar = $post["gambarLama"];
+      } else {
+         $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
+         $idGambar = autoNumber($idGambar, "gambar", "IMG");
+
+         $gambar = uploadGambar($_FILES["gambar"], $idGambar);
+         if (!$gambar) {
+            return false;
+         }
+
+         $deleteOldImg = "../../img/" . $post["gambarLama"];
+         if (file_exists($deleteOldImg)) {
+            unlink($deleteOldImg);
+         }
+      }
+
       $value = "nama_fasilitas = '$namaFasilitas', keterangan = '$keterangan', gambar = '$gambar', id_kamar = '$idKamar'";
    } else {
+      if ($namaFasilitas !== $namaFasilitasLama) {
+         if (!cekTable("fasilitas", "nama_fasilitas", $namaFasilitas, "id_kamar", "NULL")) {
+            flash("fasilitasHotel-sudah-ada", "Fasilitas Ini Sudah Tersedia", FLASH_ERROR);
+            return false;
+         }
+      }
+
+      if ($_FILES["gambar"]["error"] === 4) {
+         $gambar = $post["gambarLama"];
+      } else {
+         $idGambar = query("SELECT gambar FROM fasilitas ORDER BY gambar DESC LIMIT 1");
+         $idGambar = autoNumber($idGambar, "gambar", "IMG");
+
+         $gambar = uploadGambar($_FILES["gambar"], $idGambar);
+         if (!$gambar) {
+            return false;
+         }
+
+         $deleteOldImg = "../../img/" . $post["gambarLama"];
+         if (file_exists($deleteOldImg)) {
+            unlink($deleteOldImg);
+         }
+      }
+
       $value = "nama_fasilitas = '$namaFasilitas', keterangan = '$keterangan', gambar = '$gambar'";
    }
 
@@ -258,7 +333,16 @@ function updateFasilitas($post, $idFasilitas, $direct)
 
 function updateKamar($post, $idKamar)
 {
-   $tipeKamar = htmlspecialchars($post["tipeKamar"]);
+   $tipeKamar = strtolower(htmlspecialchars($post["tipeKamar"]));
+
+   $tipeKamarLama = strtolower($post["tipeKamarLama"]);
+   if ($tipeKamar !== $tipeKamarLama) {
+      if (!cekTable("kamar", "tipe_kamar", $tipeKamar)) {
+         flash("tipeKamar-taken", "Tipe Kamar Ini Sudah Ada !", FLASH_ERROR);
+         return false;
+      }
+   }
+
    $jumlahKamar = htmlspecialchars($post["jumlahKamar"]);
 
    $value = "tipe_kamar = '$tipeKamar', jumlah_kamar = '$jumlahKamar'";
@@ -390,4 +474,30 @@ function uploadGambar($files, $namaGambarBaru)
 
    move_uploaded_file($tmpName, "../../img/" . $gambar);
    return $gambar;
+}
+
+function cekTable($tbl, $unique, $uniqueValue, $unique2 = "", $uniqueValue2 = "")
+{
+   if ($unique2 == "" && $uniqueValue2 == "") {
+      $cek = query("SELECT * FROM $tbl WHERE $unique = '$uniqueValue'");
+      if (mysqli_num_rows($cek) > 0) {
+         return false;
+      } else {
+         return true;
+      }
+   } else if ($uniqueValue2 == "NULL") {
+      $cek = query("SELECT * FROM $tbl WHERE $unique = '$uniqueValue' AND $unique2 IS NULL");
+      if (mysqli_num_rows($cek) > 0) {
+         return false;
+      } else {
+         return true;
+      }
+   } else {
+      $cek = query("SELECT * FROM $tbl WHERE $unique = '$uniqueValue' AND $unique2 = '$uniqueValue2'");
+      if (mysqli_num_rows($cek) > 0) {
+         return false;
+      } else {
+         return true;
+      }
+   }
 }

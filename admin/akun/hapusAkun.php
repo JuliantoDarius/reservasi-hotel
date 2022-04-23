@@ -9,9 +9,10 @@ if (!isset($_GET["id"])) {
 
 $idAkun = $_GET["id"];
 
+$deleteReservasi = delete("reservasi", "id_akun", $idAkun);
 $delete = delete("akun", "id_akun", $idAkun);
 
-if (!$delete) {
+if (!$delete || !$deleteReservasi) {
    flash("hapus-akun", "Gagal Menghapus Akun Silahkan Coba Lagi !", FLASH_ERROR);
    header("Location: ./akun.php");
    exit;

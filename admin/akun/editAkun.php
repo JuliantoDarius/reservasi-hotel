@@ -24,6 +24,7 @@ if (isset($_POST["update"])) {
 
 <div id="alert" class="mb-3">
    <?php
+   cekFlashMessage("username-taken");
    cekFlashMessage("not-confirmed");
    cekFlashMessage("akun-not-updated");
    ?>
@@ -31,6 +32,7 @@ if (isset($_POST["update"])) {
 
 <form action="" method="post">
    <div class="mb-3 row">
+      <input type="hidden" name="usernameLama" value="<?= $data["username"]; ?>">
       <input type="hidden" name="passwordLama" value="<?= $data["password"]; ?>">
       <label for="username" class="col-2 col-form-label">Username</label>
       <div class="col-5">

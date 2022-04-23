@@ -1,4 +1,6 @@
-</div>
+<?php if ($_SESSION["aktif"] != "kamar" && $_SESSION["aktif"] !== "reservasi") : ?>
+   </div>
+<?php endif; ?>
 
 <script type="text/javascript">
    $('.datepicker').datepicker({

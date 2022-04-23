@@ -1,6 +1,6 @@
 function handleDetail(span) {
-      span.parentElement.textContent = span.nextElementSibling.value;
-   
+   span.parentElement.parentElement.classList.remove("card-height");
+   span.parentElement.textContent = span.nextElementSibling.value;      
 }
 
 function handlePesan() {
@@ -40,8 +40,19 @@ function handleBtn(btn, direct) {
    btn.style.display = "none";
 }
 
-function tgl(e) {
-   console.log(e.value, "test");
+function handleSearch() {
+   const tgl = document.querySelector("#search-tgl-checkin").value;
+   const search = document.querySelector("#search").value;
+
+   const xhr = new XMLHttpRequest();
+   xhr.onreadystatechange = () => {
+      if(xhr.status === 200 && xhr.readyState === 4) {
+         document.querySelector("#reservation-list").innerHTML = xhr.responseText;
+      }
+   };
+
+   xhr.open("GET", `../ajax/ajaxSearch.php?tgl=${tgl}&key=${search}`);
+   xhr.send();
 }
 
 const alertDiv = document.querySelector("#alert");

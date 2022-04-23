@@ -32,7 +32,9 @@ $query = query("SELECT * FROM akun ORDER BY id_akun DESC");
    <tbody>
       <?php if (mysqli_num_rows($query) < 1) : ?>
          <tr>
-            <td colspan="4" class="table-warning">Tidak Ada Data Akun Pada Database</td>
+            <td colspan="4" class="table-danger">
+               Tidak Ada Data Akun Pada Database
+            </td>
          </tr>
       <?php else : ?>
          <?php $no = 1; ?>

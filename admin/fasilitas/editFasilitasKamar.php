@@ -32,16 +32,19 @@ if (isset($_POST["update"])) {
       cekFlashMessage("false-extention");
       unset($_SESSION[FLASH]);
    }
+   cekFlashMessage("fasilitas-sudah-ada");
    cekFlashMessage("fasilitas-not-updated");
    ?>
 </div>
 
 <form action="" method="post" enctype="multipart/form-data">
+   <input type="hidden" name="namaFasilitasLama" value="<?= $data["nama_fasilitas"]; ?>">
    <input type="hidden" name="gambarLama" value="<?= $data["gambar"]; ?>">
    <div class="mb-3 row">
       <label for="namaFasilitas" class="col-2 col-form-label">Nama Fasilitas</label>
       <div class="col-5">
          <input type="text" class="form-control" id="namaFasilitas" name="namaFasilitas" required autocomplete="off" value="<?= ucwords($data["nama_fasilitas"]); ?>">
+         <div class="form-text">Untuk Ukuran Kamar Gunakan m2 Contoh : (31m2)</div>
       </div>
    </div>
 

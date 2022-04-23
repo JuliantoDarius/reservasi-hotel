@@ -21,6 +21,7 @@ if (isset($_POST["tambah"])) {
       cekFlashMessage("false-extention");
       unset($_SESSION[FLASH]);
    }
+   cekFlashMessage("fasilitas-sudah-ada");
    cekFlashMessage("fasilitas-not-inserted");
    ?>
 </div>
@@ -30,6 +31,7 @@ if (isset($_POST["tambah"])) {
       <label for="namaFasilitas" class="col-2 col-form-label">Nama Fasilitas</label>
       <div class="col-5">
          <input type="text" class="form-control" id="namaFasilitas" name="namaFasilitas" required autocomplete="off">
+         <div class="form-text">Untuk Ukuran Kamar Gunakan m2 Contoh : (24m2)</div>
       </div>
    </div>
 
